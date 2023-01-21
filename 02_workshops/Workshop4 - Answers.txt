@@ -1,0 +1,155 @@
+ 
+6. 
+ 
+#include <stdio.h>
+
+int main(void)
+{
+char gender;
+printf("Enter character for gender: ");
+scanf("%c", &gender);
+if( (gender=='F') |(gender=='f'))
+{printf("You are a Female \n");}
+else if( (gender=='M') |(gender=='m'))
+{printf("You are a Male \n");}
+else
+{printf("Invalid input character \n");}
+return(0);
+
+}
+
+ 
+7. 
+ 
+ 
+#include <stdio.h>
+
+int main(void)
+{
+
+char operation;
+double num1,num2,result;
+printf("Enter the operation you want: ");
+scanf("%c", &operation);
+printf("\nEnter the first number: ");
+scanf("%lf", &num1);
+printf("Enter the second number: ");
+scanf("%lf", &num2);
+
+switch(operation)
+{
+case(('a')):
+{
+result = num1 + num2;
+printf("Addition of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+}
+
+case(('A')):
+{
+result = num1 + num2;
+printf("Addition of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+}
+
+case('s'):
+{
+result = num1 - num2;
+printf("substraction of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+
+case('S'):
+{
+result = num1 - num2;
+printf("substraction of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+
+}
+
+case('m'):
+{
+result = num1 * num2;
+printf("Multiplication of %lf and %lf is %.3lf \n",num1,num2,result);
+printf("mult \n");return(0);
+}
+case('M'):
+{
+result = num1 * num2;
+printf("Multiplication of %lf and %lf is %.3lf \n",num1,num2,result);
+printf("mult \n");return(0);
+}
+
+case('d'):
+{
+if(num2 != 0)
+{
+result = num1 / num2;
+printf("Division of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+}
+else{printf("Divide by zeror Error");return(0);}
+}
+
+case('D'):
+{
+if(num2 != 0)
+{
+result = num1 / num2;
+printf("Division of %lf and %lf is %.3lf \n",num1,num2,result);
+return(0);
+}
+else{printf("Divide by zeror Error");return(0);}
+}
+
+default:{printf("Invalid Character \n");return(0);}
+
+}
+return(0);
+}
+
+}
+ 
+ 
+ 
+8. 
+ 
+#include <stdio.h>
+
+int main(void)
+{
+
+long sum = 0;
+for(int i=21; i<911; i = i + 3)
+{
+    sum = sum + i;
+}
+printf("Sum of multiples of 3 between 20 and 911 is: %ld \n",sum);
+return(0);
+}
+
+
+
+ 
+ 9. 
+ 
+#include <stdio.h>
+
+int main(void)
+{
+
+long sum = 0;
+int i = 21;
+while( i < 911 )
+{
+    	sum = sum + i;
+	i = i + 3;
+}
+printf("Sum of multiples of 3 between 20 and 911 is: %ld \n",sum);
+return(0);
+}
+
+
+
+ 
+ 
+ 

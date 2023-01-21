@@ -1,0 +1,11 @@
+
+1. A process contains a global integer variable known as data_v initialized to 100 which store in data segment. 
+Process is having a local integer variable in main function as stack_v = 1000. It stores an integer variable heap_v=10000 in Heap.
+Now, a new child process is created and parent is suspended for 1s allowing time for the child to terminate. 
+The child process's heap_v is changed to 20000, stack_v is changed to 2000 and data_v is changed to 200. 
+Each process must print its data_v and stack_v values when each of them executes along with process ID. The child should print first?
+
+2. Create a pipe to transfer the message "message from parent" from parent process to child process and display using terminal in child process?
+
+3. Create a bidirectional communication channel using pipes to transfer the message "message from parent" from parent process to child process,
+response message "response from child" from child process to parent process and display using terminal?

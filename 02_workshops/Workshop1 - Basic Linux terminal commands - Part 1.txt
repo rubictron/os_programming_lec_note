@@ -1,0 +1,40 @@
+ 
+ 1. Log into ubuntu
+ 
+ 2. Download and Install gcc compiler
+ 
+ 3. Download and Install build essentials
+ 
+ 4. Download and install gedit
+ 
+ 5. Update ubuntu.
+ 
+ 6. Open linux terminal
+ 
+ 7. Explain hostname and username in Linux
+ 
+ 8. What is the syntax of displaying hostname and username in Linux Terminal?
+ 
+ 9. What is the meaning of ~ symbol? 
+ 
+ 10. go to the Desktop directory in Home?
+ 
+ 11. Display the current working directory?
+ 
+ 12. Create a new folder in the Desktop with name Example1 and change the current directory to Example1?
+ 
+ 13. Go back to the previous directory and rename Example1 as Folder1?
+ 
+ 14. List all files in Home directory?
+ 
+ 15. List all files in Home directory with hidden files?
+ 
+ 16. List all files in Home directory in long list format?
+ 
+ 17. Change directory to root directory and list all files?
+ 
+ 18. Change directory back to desktop using a single command and delete directory Folder1?
+ 
+ 19. Clear the screen of the terminal?
+ 
+ 

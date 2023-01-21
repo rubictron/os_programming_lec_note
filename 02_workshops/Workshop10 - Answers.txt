@@ -1,0 +1,120 @@
+
+(Q1)
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <sys/stat.h>
+
+struct msg
+{
+long type;
+char text[50];
+};
+
+struct msg create_message(long type1, char msgname[]);
+
+
+int main()
+{
+key_t key_for_MQ = ftok("file1.text", 56);//creating a key for MQ
+
+int MQID = msgget(key_for_MQ, IPC_CREAT|0666); //creating the MQ
+
+pid_t PID1;
+
+switch(PID1 = fork())
+{
+case -1:
+perror("Child1 error");
+exit(0);
+break;
+
+case 0:       //This is child C1
+{
+getpid();
+pid_t PID2;
+switch(PID2 = fork())
+{
+case -1:
+perror("Child2 error");
+exit(0);
+break;
+
+case 0:  // This is child C2
+    getpid();
+    struct msg msgC2[4];
+    for(int i=0;i<4;i++)
+    {
+    msgrcv(MQID,&msgC2[i],sizeof(msgC2[i].text),-200,IPC_NOWAIT);
+    }
+    printf("I am child C2 with PID %d. I received \n %s %s %s %s \n",getpid(),msgC2[0].text,msgC2[1].text,msgC2[2].text,msgC2[3].text);
+    printf("\n child c2 terminated");
+    exit(0);
+break;
+
+default: // This is child C1 parent of C2, child of P1
+getpid();
+struct msg msgC1[3];
+for(int i=0;i<3;i++)
+{
+msgrcv(MQID,&msgC1[i],sizeof(msgC1[i].text),0,IPC_NOWAIT);
+}
+printf("I am child C1 with PID %d. I received \n %s %s %s \n",getpid(),msgC1[0].text,msgC1[1].text,msgC1[2].text);
+waitpid(PID2,NULL,0);
+printf("\n Child C1 terminated");
+exit(0);
+break;
+}
+}
+break;
+
+
+default:     //This is process P1
+getpid();
+struct msg msgs[8];
+msgs[0] = create_message(100,"first message \n");
+msgs[1] = create_message(200,"second message \n");
+msgs[2] = create_message(300,"third message \n");
+msgs[3] = create_message(100,"fourth message \n ");
+msgs[4] = create_message(200,"fifth message \n ");
+msgs[5] = create_message(100,"sixth message \n ");
+msgs[6] = create_message(300,"seventh message \n ");
+msgs[7] = create_message(150,"eighth message \n ");
+
+for(int i = 0;i<8;i++)
+{
+msgsnd(MQID,&msgs[i],sizeof(msgs[i].text),IPC_NOWAIT);
+}
+
+waitpid(PID1,NULL,0); //wait until child C1 terminates
+struct msg msgfinal;
+msgrcv(MQID,&msgfinal,sizeof(msgfinal.text),300,IPC_NOWAIT);
+printf("\nI am parent P1 with PID %d. I received \n %s \n",getpid(),msgfinal.text);
+printf("\n parent P1 also terminated");
+msgctl(MQID,IPC_RMID,NULL);  //MQ must be removed before the end of last process.
+exit(0);
+break;
+}
+
+return(0);
+}
+
+struct msg create_message(long type1, char msgname[])
+{
+struct msg newmsg;
+newmsg.type = type1;
+strcpy(newmsg.text,msgname);
+return newmsg;
+
+}
+
+
+
+

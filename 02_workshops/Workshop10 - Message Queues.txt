@@ -1,0 +1,19 @@
+
+1. Create a message que and send the following messages to the queue and create 2 Child processes C1 and C2 where C1 is the child of initial 
+process and C2 is the child of C1. The initial process(P1) must send the following messages to the queue and wait until the first child 
+process(C1) terminates.
+ 
+   Type           Text
+   100			  first message
+   200            second message
+   300			  third message
+   100            fourth message
+   200            fifth message
+   100            sixth message
+   300            seventh message
+   150            eighth message
+ 
+The first child process must read and print first 3 messages of que in FIFO manner and print to terminal along with process ID.
+Then, the first child process will wait until the second child process reads next 4 messages in ascending order of type of messages. Then, 
+second child must terminate after printing the 4 messages it read. Then, child 1 must also terminate. After that the initial process must 
+read the message with type 300 and it should terminate after printing the read message with process ID?

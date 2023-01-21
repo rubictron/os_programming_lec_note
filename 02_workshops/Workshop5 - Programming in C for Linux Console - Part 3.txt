@@ -1,0 +1,10 @@
+
+//You are adviced to create separate directories for each program you write
+ 1. Compute factorial of 60 using the concept of recursive functions?
+ 
+ 2. Find the minimum of user input 10 numbers using knowledge of arrays and loops without using functions?
+ 
+ 3. Find the maximum of user input 10 numbers using passing of an array inside a function?
+ 
+ 
+ 

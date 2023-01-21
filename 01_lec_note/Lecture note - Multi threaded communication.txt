@@ -1,0 +1,68 @@
+THREADS
+
+1. A thread is an execution context which is independently scheduled but shares a single address space with other sibling threads of the same 
+process. A CPU core is the physical unit of the processor which can work on a thread. Only one thread can be running per CPU at a given time 
+for single threaded processors like old Pentium. But core i processors support hyper-threading up to two threads per CPU core. so, the number
+of logical cores(cores which appear to CPU) is twice of actual CPU cores. A process has its own address space.
+ Threads have a thread ID. Different threads of the same process have different areas of stack allocated in common address space.
+
+pthread_t is the data type used to declare a thread ID.
+
+int pthread_create(pthread_t * tid, attr, void * start function, void * arg)
+tid is a pointer to a thread ID.
+attr is attributes of newly created thread. set this NULL for default attributes. The new thread starts its execution by invoking the start
+function. start function's arguments and return types must be void *( i.e. void pointer). arg is a pointer to arguments of the start function.
+
+When two or more multiple threads execute in parallel, it is known as simultaneous Multi threading(SMT) or Hyper threading(HT).
+
+A thread can be terminted by using one of the following ways.
+1. A sibling thread calls exit()
+2. Main thread returns or call exit()
+3. Thread function calls the return statement or pthread_exit().
+
+calling void pthread_exit(void * status) terminates the calling thread. status is a void pointer to another thread's pthread_join call.
+It can be set NULL if not interested in status.
+
+int pthread_join(pthread_t tid, void ** val) causes the calling thread to wait unitil the thread with tid terminates. 
+val is a double pointer of type void pointing to status of a pthread_exit. If not interested, it can be set NULL.
+
+
+
+RACE CONDITIONS AND THREAD SYNCHRONIZATION
+
+race conditions occur when mutiple threads function concurrently making order of the thread execution determining the final output.
+Ex: multiple threads try to update a global variable or local static variable(i.e. variables residing in data segment of the virtual address
+space of a process) at the same time; but only one of them will be able to update at a time leading to 
+different outputs each time the process runs. These do not include thread function's local variables which have addressees in stack allocated
+for different threads. This occurs due to lack of concurrency control mechanism.
+
+You can use locks to protect a shared variable to avoid race conditions. Concurrent modifications can be prevented using Mutex(Mutually Exclusive).
+It is either locked(owned by a particular thread) or unlocked(not belonging to any thread). A locking attempt by a thread on already locked
+thread is suspended until that locked thread unlocks the Mutex.
+
+pthread_mutex_t is used to declare a mutex.
+You can initialize a mutex using PTHREAD_MUTEX_INITIALZER assigned to a mutex.
+
+A mutex must be initialized before locking or unlocking it to avoid deadlocks. 
+
+int pthread_mutex_lock(pthread_mutex_t * mutptr) will lock an unlocked mutex by the calling thread. If mutex is already locked,	calling thread
+blocks and wait until the mutex is unlocked.
+
+int pthread_mutex_unlock(pthread_mutex_t * mutptr) will unlock a locked mutex. If multiple threads are waiting to lock the mutex, only one
+of them will be able to lock the mutex. Only the owner thread(thread which locked the mutex) should unlock it to avoid deadlocks.
+
+int pthread_mutex_destroy(pthread_mutex_t * mutptr) destroys the mutex. Only unlocked mutex must be destroyed to avoid deadlocks.
+
+
+CONDITION VARIABLES
+
+condition variables cause the threads to suspend execution and relinquish the processors until some condition is satisfied.
+A condition variable can be declared using data type pthread_cond_t.
+You can initialize it using PTHREAD_COND_INITIALIZER
+
+int pthread_cond_wait(pthread_cond_t * cond, pthread_mutex_t * mut) 
+- This function causes the thread to release the mutex lock in mut and go to sleep until awaken by a signal from another thread is received 
+on condition variable cond to reacquire the lock.
+int pthread_cond_signal(pthread_cond_t * cond ) 
+- This function can be used to waken up another sleeping thread by signalling on condition variable cond. If several threads are sleeping on
+cond, only one of them will be awaken. If no thread is waiting, nothing happens.

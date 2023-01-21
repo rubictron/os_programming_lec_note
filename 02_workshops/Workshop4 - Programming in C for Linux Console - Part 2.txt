@@ -1,0 +1,16 @@
+ 
+ 6. Write a program to display the gender of a person. The program first should prompt for user input. 
+ In case the user inputs f or F, the program displays "You are a Female". 
+ If user inputs m or M, the program displays "You are a Male". 
+ otherwise if user input any other character, the program should display "Invalid input".?
+ 
+ 7. Write a simple calculator program with possible error handling to add,subtract,multiply and divide two user input numbers using switch statements. First the 
+ user will be prompted for the operation which he needs to enter the first letter(capital or simple) of the operation. Ex: a or A for adding.
+ Then user is prompted to enter the two values and final calculated result displayed in standard output?
+ 
+ 8. Write a program using for loops to calculate the sum of multiples of 3 between 20 and 911 using the for loop?
+ 
+ 9. Write the same program in (8) using the while loop?
+ 
+ 
+ 

@@ -1,0 +1,6 @@
+
+1. Use shared memory to transfer the message "message from parent P1" from parent process to child process C1. C1 has a Child C2. 
+When message from P1 is received to C1; C1 will respond P1 with "response from child C1". At the same time C1 must send "message from parent C1"
+to C2. When C2 receives that message, it should respond to C1 with "response from child". P1 and C1 must exit after responses from child are heard.
+C2 must terminate after sending response to C1?
+

@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <sys/shm.h>
+#include <string.h>
+#include <sys/stat.h>
+
+
+
+int main()
+{
+
+key_t key_for_SM1 = ftok("file1.text", 56);//creating a key for SM
+key_t key_for_SM2 = ftok("file1.text", 40);
+
+int SMID1 = shmget(key_for_SM1,4096,IPC_CREAT|0666); //creating the SM1
+int SMID2 = shmget(key_for_SM2,4096,IPC_CREAT|0666); //creating the SM1
+
+pid_t PID1;
+
+switch(PID1 = fork())
+{
+case -1:
+perror("Child1 error");
+exit(0);
+break;
+
+case 0:       //This is child C1
+{
+getpid();
+pid_t PID2;
+switch(PID2 = fork())
+{
+case -1:
+perror("Child2 error");
+exit(0);
+break;
+
+case 0:  // This is child C2
+getpid();
+char bufc2[50];
+char * shmptrc2;
+shmptrc2 = (char *)(shmat(SMID2,NULL,SHM_W|SHM_R));
+strcpy(bufc2,shmptrc2);
+printf("\n C2 received: %s", shmptrc2); 
+char msgc2[] = "Response from child C2";
+strcpy(shmptrc2, msgc2);
+printf("\n C2 sent: %s", shmptrc2);
+exit(0);
+
+break;
+
+default: // This is child C1 parent of C2, child of P1
+getpid();
+char * shmptrc1a;
+char * shmptrc1b;
+char bufc1a[50];
+shmptrc1a = (char *)shmat(SMID1,NULL,SHM_W|SHM_R);
+shmptrc1b = (char *)shmat(SMID2,NULL,SHM_W|SHM_R);
+strcpy(bufc1a, shmptrc1a);
+printf("\n C1 received: %s", shmptrc1a);
+char msgc1a[] = "Response from child C1";
+char msgc1b[] = "Message from parent C1";
+strcpy(shmptrc1a,msgc1a); // sending to p1
+strcpy(shmptrc1b,msgc1b); // sending to c2
+printf("\n C1 sent: %s", shmptrc1a);
+printf("\n C1 sent: %s", shmptrc1b);
+waitpid(PID2,NULL,0); //wait until c2 terminates
+char bufc1b[50];
+strcpy(bufc1b,shmptrc1b);
+printf("\n C1 received: %s", shmptrc1b);
+exit(0);
+break;
+}
+}
+break;
+
+
+default:     //This is process P1
+getpid();
+char msgp1[] = "message from parent p1";
+char * shmptrp1;
+shmptrp1 = (char *)shmat(SMID1,NULL,SHM_W|SHM_R);
+strcpy(shmptrp1,msgp1); //write into shared memory
+printf("\n P1 sent: %s ", shmptrp1);
+sleep(0.01);
+char bufp1[50];
+strcpy(bufp1,shmptrp1);
+printf("\n P1 received: %s",shmptrp1); 
+exit(0);
+break;
+}
+
+return(0);
+}
+
+
+

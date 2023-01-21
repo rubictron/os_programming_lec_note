@@ -1,0 +1,99 @@
+ 
+ 1. cat >Hello.c
+ 
+ #include <stdio.h>           //Pre-Precessor directive to library stdio.h as printf is used
+ 
+ int main(void)
+ {
+    printf("Welcome to Operating Systems Programming \n");  //printf is used to write to standard output(display)
+	printf("My first Program in EE6202 \n");
+	return(0);
+ }
+ // save the Hello.c and close
+ 
+ gcc Hello.c -o Hello        // GCC stands for GNU C compiler. This command compiles Hello.c and create Hello.out file
+ 
+
+  2. 
+cat >prog2.c
+ 
+ #include <stdio.h>  
+ 
+ int main(void)
+ {
+    printf("Name \t\t\t Age \n");
+	printf("=========================== \n");
+	printf("W.D.F. Rajika \t\t49 \n");
+	printf("W.K.G. Fernando \t59 \n");
+	return(0);
+ }
+ 
+ gcc prog2.c -o prog2
+ 
+ 3. 
+cat >prog3.c
+ 
+#include <stdio.h>   
+#include <math.h>    //some math functions are sin,cos,acos,asin,log,log10,sqrt,exp in which both argument and return types are double.
+  
+ 
+ int main(void)
+ {
+    double Radius, Height, Volume;
+    printf("Enter Radius of Cylinder:");
+    scanf("%lf", &Radius); //lf is the format specifier for long float. There are several formats as,
+	
+	format specifier      	data type 								size in bytes
+	%d						signed integer							4
+	%u						unsigned integer						4
+	%ld						long									8
+	%lu						unsigned long							8
+	%o                      integer in ocatal format				8
+	%x						integer in Hex.Dec form 				8
+	%f						float									4
+	%lf						double									8
+	%e                      floating point in scientific notation	8
+	%c                      char, unsigned char 					1
+	%p                      pointer to void type(void *)
+	%s                      pointer to character type(char *)
+		
+	printf("\n Enter Height of Cylinder");
+	scanf("%lf", &Height);
+	Volume = M_PI * Radius * Radius * Height;
+	printf("\nVolume of Cylinder is %lf \n", Volume);
+	return(0);
+ }
+ 
+ gcc prog3.c -o prog3
+ 
+ 4.  
+cat >prog4.c
+ 
+#include <stdio.h> 
+#define num1 20
+
+ int main(void)
+ {
+    printf("Octal format of number 20 is: %o \n",num1);
+	printf("Hexa Decimal format of number 20 is: %x \n",num1);
+	return(0);
+ }
+ 
+ gcc prog4.c -o prog4
+ 
+  5.  
+cat >prog5.c
+ 
+#include <stdio.h> 
+
+ int main(void)
+ {
+	const double num1 = 123.4;
+    printf("Scientific notation of number 123.4 is: %e \n",num1);
+	return(0);
+ }
+ 
+ gcc prog5.c -o prog5
+ 
+
+ 

@@ -1,0 +1,31 @@
+
+SHARED MEMORY
+
+Shared memory allows two or more processes to share the same region (segment) of physical memory. 
+Since a shared memory segment becomes part of a process’s user-space memory, no kernel intervention is required for IPC. 
+All that is required is that one process copies data into the shared memory; that data is immediately available to all other processes 
+sharing the same segment. This provides fast IPC by comparison with techniques such as pipes or message queues, where the sending process 
+copies data from a buffer in user space into kernel memory and the receiving process copies in the reverse direction. 
+
+int shmget(key_t key,size_t size_seg, int shmflag) to create a new shared memory segment or obtain the identifier of an existing segment 
+(i.e. one created by another process). This call returns a shared memory identifier for use in later calls. The key is returned by 
+IPC_PRIVATE or ftok(). size_seg is the size of shared memory segment. It is an integer multiple of page size. 
+The default page size of most systems are 4096 bytes. shmflag are the privileges and IPC_CREAT.
+
+void * shmat(int ID, void * shmaddress, int shmflag) to attach the shared memory segment identified by ID that is, make the segment
+part of the virtual memory of the calling process in the space between Heap and stack. if shmaddress is kept NULL, the kernel will decide the
+suitable address of the pointer of shared memory. shmflag specifies how the attached SM is intended for accessesing. It can be one or more of 
+SHM_R, SHM_W. At this point, the shared memory segment can be treated just like any other memory available to the program. 
+In order to refer to the shared memory, the program uses the addr value returned by the shmat() call, which is a pointer to the start of the 
+shared memory segment in the process’s virtual address space. Therefore, all children of a parent process inherits SM segment in virtual
+address space of all the processes.
+
+shmdt(void * shmaddress) detaches the shared memory segment. After this call, the process can no longer refer to the shared memory.
+This step is optional, and happens automatically on process termination.
+
+int shmctl(int SHMID, int cmd, struct shmid_ds * buf) is used to control shared memory. Setting cmd to IPC_RMID and buf to NULL will
+delete the shared memory segment. The segment will be destroyed only after all currently attached processes have detached it.
+Only one process needs to perform this step.
+
+
+getconf PAGESIZE

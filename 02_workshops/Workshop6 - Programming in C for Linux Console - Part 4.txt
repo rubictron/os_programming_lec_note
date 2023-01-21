@@ -1,0 +1,15 @@
+
+//You are adviced to create separate directories for each program you write
+ 1. Arrange user input 10 numbers in ascending order using knowledge of arrays,
+ loops,pass by reference,functions and pointers?
+
+ 2. Write a program to enter 4 six letter fixed size names of People by user and
+ arrange them in reverse alphabetical order according to first letter only using
+ two dimensional arrays,functions,loops,pointers?
+
+ 3. Create a structure and a union type to store a character, integer and double.
+ Display each stored value to the user?
+
+ 4. Create a triangle structure by nesting three (x,y) position structures.
+ Get input from user for the 3 points and Calculate and display its perimeter
+ using knowledge of pointers to structures and functions?

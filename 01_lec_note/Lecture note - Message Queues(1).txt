@@ -1,0 +1,37 @@
+MESSAGE QUEUES
+
+Message queues(MQ)s are similar to pipes. But they differ w.r.t. pipes in some ways. 
+Message queues are stored as a linked list in kernel space. Kernel is the core of an operating system providing many critical functions 
+such as process scheduling, process creation and termination, memory management etc. It has higher access privileges than user space. Kernel 
+can access all parts of the memory. Parts of the virtual memory including code, data, stack and heap are stored in user space. Page table is
+stored in Kernel space.
+
+1. File descriptors associated with pipes have process scope. But, by using unique identifiers in MQ, any process can access it.
+2. Message received from a message queue must be read in whole unlike a pipe where a part of a message can be read if required.
+3. MQs can be read as First In First Out (FIFO) manner or retrieved by using integer type. In pipes, it is always FIFO.
+
+
+int msgget(key_t key, int msgflag) is used to create a mesage queue if it does not exist like open() and return the MQ identifier 
+as an integer. key must be unique and specified using IPC_PRIVATE or ftok(const char * "filename",int integer). 
+ftok generates a key based on the file name supplied and the integer argument. 
+msgflag can be an ored list with IPC_CREAT | IPC_EXCL | S_IRUSR 
+| S_IWUSR etc. 0666 also can be used for privileges.
+IPC_CREAT is similar to O_CREAT. IPC_EXCL states that IPC object is used for creation only. If an IPC object with given
+key already exists an error occurs(returns -1).
+
+The message to be sent or received is typically a structure with message type(long) and text(string).
+int msgsnd(int msqid, void * msgp,size_t msgsz, int msgflag) is used to send a message of size msgsz pointed by pointer msgp to an existing MQ
+of MQ identifier msgqid. msgflag specifies whether it blocks or not if MQ is full. Usually sending is blocked if MQ is full. But, if msgflag 
+has IPC_NOWAIT then there is no blocking. 0 states that it blocks.
+
+The message receiving is done using msgrcv(). It is similar to msgsnd except it has a fourth argument 
+long msgtype to select the message from
+the queue.
+
+if msgtype == 0; the first message from the queue is removed.
+ If msgtype > 0, the first msg whose type is equal to msgtype is selected.
+if msgtype < 0; first message of the queue's lowest mtype field less than or equal to absolute value of msgtype will be selected.
+Message queues store messages as linked lists in Kernel data area.
+
+int msgctl(int msgqid, int cmd, struct msgqid_ds *buf) is used to control a message queue. For deleting cmd is set to IPC_RMID. buf is set 
+to NULL. A MQ if not deleted resides in memory even if all processes referring to it are terminated.

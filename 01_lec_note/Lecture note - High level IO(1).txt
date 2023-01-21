@@ -1,0 +1,32 @@
+
+//fp is a pointer to a structure called FILE. If file cannot be opened, 
+fp is pointed to NULL. If it is successful returns an integer.
+fopen() is used. F
+irst argument is name of the file. 
+Second argument is mode. Mode can be,
+'r' - Open fie for Reading
+'w' - Open file for Writing. If file already exists, 
+      the content will be deleted. If file does not exists, 
+      new file will be created
+'a' - Open file for writing. If file exists previous 
+      content will not be deleted, If file does not exists, 
+      new file will be created
+
+When a C program is started, the operating system environment is 
+responsible for opening three files and providing pointers for them. 
+These files are the standard input, the standard output, 
+and the standard error; the corresponding file pointers are called 
+stdin, stdout, and stderr, and are declared in <stdio.h>. 
+Normally stdin is connected to the keyboard and
+stdout and stderr are connected to the screen, but stdin and stdout 
+may be redirected to files or pipes
+
+fprintf returns an integer upon success.
+
+fscanf() reads word by word from a file. 
+It returns EOF at the end of the file. It returns 1 upon successful 
+fetching of a word.
+
+
+
+

@@ -1,0 +1,59 @@
+
+1. Write a program to create two threads. one thread runs a function which increments a process scope global variable 10 million times and
+the other thread must decrement it 10 million times. At last main thread must return the value of global variable?
+
+2. Modify the above program with concurrency control using Mutex to provide correct result?
+
+3. Create a hyper-threaded process with 2 simultaneous threads. one thread should write as "Thread1" repeatedly 30 times and the other
+ thread should write as "thread2" repeatedly 30 times. When thread1 executes, it should print the word "Thread1" 10 times and wait
+ until the other thead prints "Thread2" 5 times before thread1 prints again. Use Mutex and condition variables for this program?
+
+4. Use 5 hyper threads(T1,T2,T3,T4,T5) to print "Thread1 ", "Thread2 " by each thread to console concurrently along with thread ID.
+Assume each thread consumes a constant time of 1 ms to print a word?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

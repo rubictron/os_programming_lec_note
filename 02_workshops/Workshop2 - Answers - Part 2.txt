@@ -1,0 +1,29 @@
+10. touch -m Doc1.txt
+
+11. cat Doc2.txt
+
+12. cd ~/Desktop
+    mkdir mydir2
+	cd mydir2
+	cat >Doc1.txt
+	ctrl+D
+	cat >Doc2.txt
+	ctrl+D
+	
+13. cat Doc1.txt Doc2.txt
+
+14. cat Doc1.txt>>Doc2.txt
+    cat Doc2.txt
+	
+15. gnome-session-quit
+
+16. sudo shutdown
+ or sudo init 0
+
+17. sudo reboot
+ or sudo init 6
+ or sudo shutdown -r now 
+ 
+18. sudo adduser username
+	
+ 

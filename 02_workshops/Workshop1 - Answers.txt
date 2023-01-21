@@ -1,0 +1,52 @@
+ 
+ 1.
+ 
+ 2. sudo apt-get install gcc                //In order to run sudo command, you must have administrator privilege
+ 
+ 3. sudo apt-get install build-essentials
+ 
+ 4. sudo apt-get install gedit
+ 
+ 5. sudo apt-get update
+ 
+ 6. Click ubuntu software. Search and select Terminal. click launch
+ or simply ctrl+Alt+T
+ 
+ 7. Hostname is the name of the Linux installation or in other words: name of the machine
+    Username is the current user of the Linux.
+	
+ 8. username@hostname
+ 
+ 9. ~ stands for Home/user directory in linux
+ 
+ 10. cd Desktop. 
+ //cd stands for change directory. If you want to go to a different directory. Specify the full path of the directory.
+ //Directories are case sensitive.
+ 
+ 11. pwd 
+ //pwd stands for print working directory.
+ 
+ 12. mkdir Example1
+ //mkdir stands for make directory.
+ cd Example1
+ 
+ 13. cd .. or cd ~/Desktop
+ mv Example1 Folder1
+ 
+ 14. cd ~
+     ls
+	 
+ 15. ls -a
+ 
+ 16. ls -l
+ 
+ 17. cd /
+ ls
+ 
+ 18. cd ~/Desktop
+     rmdir Folder1
+	 
+ 19. clear
+ 
+ 
+ 

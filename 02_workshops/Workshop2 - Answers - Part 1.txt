@@ -1,0 +1,33 @@
+ 
+ 1. mkdir folder1
+     mv folder1 ~
+	 
+ 2. gedit
+ 
+ 3. cp txt1.text txt2.text
+ 
+ 4. cd ..
+     cp -r ~/Desktop directory1             //-r stands for recursively. That is recursively copy directories, files and subdirectories.
+ 
+ 5. rm -r directory1
+    cd Desktop
+	
+ 6. chmod u-w txt2.txt
+ 
+ //chmod command is used to change the privileges of users. There are 4 user types as user(u), users in  file's group(g), other users not in
+ //file's group(o) and all other users (a).
+ //3 operator types exist as +, - and =. + operator - operator add privileges to existing privileges. = operator adds only the specified
+ //privileges and removes other privileges.
+ //permissions are rwxXst: read(r), write(w), execute -search for directories(x), execute only if the file is a directory or has execute
+ //permission for user(X), set user or group ID on execution(s), restricted deletion flag or sticky bit(t).
+	
+   chmod g+w txt2.txt
+   
+7. mkdir mydir
+   cd Desktop/mydir
+   touch Doc1.txt Doc2.txt Doc3.txt
+   
+8. touch -a Doc1.txt
+
+9. touch -c Doc1.txt
+

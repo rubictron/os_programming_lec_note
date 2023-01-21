@@ -1,0 +1,20 @@
+
+//You are adviced to create separate directories for each program you write
+1. Write a program in C to display "Welcome to Operating Systems Programming", "My first Program in EE6202" as two lines in standard Output?
+ 
+2. Write a program to display following table?
+ 
+ Name					Age
+ ==========================
+ W.D.F. Rajika			49
+ W.K.G. Fernando		59
+ 
+ 3. Write a program to calculate volume of a cylinder. The radius and height must be obtained from the user using standard input and the 
+ calculated volume must be displayed on screen?
+ 
+ 4. Write a program to display 20 in octal and Hexadecimal format?
+ 
+ 5. Write a program to display 123.4 in scientific notation?
+ 
+  
+ 

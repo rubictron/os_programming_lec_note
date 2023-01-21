@@ -1,0 +1,111 @@
+
+1. A process is an instance of an executing program. 
+A program is a file containing range of information that describes how to 
+construct, run and terminate one or more processes at run time.
+
+PID
+A process is having a unique Process Identifier(PID) which is a positive integer.
+pid_t is used as the data type of PIDs. PIDs range from 1 to 32,767(2^15 in 32 bit platforms)
+or 4 million(2^22 in 64 bit platforms).
+Initialization process(init) is given PID 1. 
+When PIDs runout empty PIDs are checked starting from 300.
+PID can be obtained using getpid() system call. 
+A process's parent ID(PID of the process which created the process) can be obtained using
+getppid(). pid_t is the data type of process ID.
+When a parent process is terminated, the init process is assigned as 
+the child processe's parent.
+
+Process Memory
+
+A process memory consists of a set of memory segments in virtual memory.
+Swap area is a reserved memory in secondary memory(disk space) which is used to 
+supplement the primary memory(RAM). 
+Pages from swap area are loaded into physical memory as required when a page fault occurs. 
+That is when process refers to an address in virtual memory that is not in RAM.
+Virtual(not real) memory contains memory addresses of both Physical memory(RAM) and swap area. 
+The smallest memory unit size of virtual memory is called page. So both RAM and swap 
+area are also broken into pages. A processe's virtual address space is mapped to 
+physical memory through a page table. Mapping is done using a Paged Memory Management 
+Unit (PMMU). Pages in RAM are kept based on spatial locality
+(tendency of a process to refer to memory address adjacent to already accessed addresses 
+due to sequential processing and data structures) or temporal locality(tendency of 
+future memory addresses being addresses recently accessed).
+
+Virtual memory of a process consists of following sections.
+
+1.Text segment contains the machine language instructions of the program run by the process.
+
+2.Intialized data segment contains initialized global(accessible throughout the program 
+execution such as variables declared outside a function) and static(not changing) 
+variables of the program.
+eg: char ch1[9] = "nilmantha"; static float y = 4.098; inside or outside function
+
+3.Uninitialized data segment contains uninitialized global and static variables.
+eg: int x; declared outside a function or static int x; 
+declared inside a function or outside a function.
+
+4. Stack segment has stack frames. one stack frame is allocated for currently called 
+function which stores function's local variables.
+eg: int x; inside a function. Stack grows downwards.
+
+5. Heap segment is a dynamically allocated memory at runtime. Heap grows upwards.
+ eg: int *pt; pt = malloc(size_t size1);
+//malloc assigns size1 amount of bytes in heap and returns the pointer to it.
+
+Due to existing of virtual memory, more processes can be kept in RAM, as only a 
+part of VM is kept in RAM. This increases CPU utilization which is good.
+Processes can be isolated by mapping distinct pages in RAM or processes can share 
+memory by mapping VM addresses of diffent processes into same RAM pages. 
+
+fork() system call creates an exact copy of a process.
+The new process is known as the child. The original process is the parent. The child
+and parent both execute the program text of the same address space. 
+But have separate copies of stack, heap and data segments which can be modified later
+if required. Fork returns child's process ID for the parent process or -1 on error. 
+It always returns 0 for the child process. 
+It is indeterminate after a fork() whether the child or the parent executes.
+Therefore, the process execution can be swithched after a fork() call. fork() is 
+defined in <unistd.h>
+
+exit(int status) library function terminates a process freeing open file descriptors 
+and memory resources. It is defined in <stdlib.h>
+
+waitpid(pid_t pid,int * status, int options) suspends the execution of parent until 
+children of the parent process terminates. termination status of the child is the status 
+of wait retrieved by exit(state) function when the child terminates. If you are not 
+interested in the status it can be kept NULL. options further describes how to wait. 
+0 specifies that there are no options. If the specific process id of the child is 
+passed to pid, then the parent will wait until that particular child process is terminated.
+If -1 is passed as the argument, then the parent process(the process which calls 
+waitpid()) will only wait until any of its child processes terminates. 
+waitpid( ) is defined in <unistd.h>
+
+sleep(seconds) called in parent process will allow the child to execute and 
+suspend parent for seconds specified. It can hold any process(parentor child) 
+for given amount of seconds. defined in <unistd.h>
+
+
+
+PIPES
+
+Pipe is a unidirectional byte stream. It is a buffer maintained in kernel memory. 
+Size of the pipe is PIPE_BUF which is 4096 bytes in Linux.
+A pipe contains two ends. They are reading end and the writing end. As with any file 
+descriptor, we can use the read() and write() system calls
+to perform I/O on the pipe. Once written to the write end of a pipe, data is immediately 
+available to be read from the read end.
+A read() from a pipe obtains the lesser of the number of bytes requested and the number 
+of bytes currently available in the pipe 
+(but blocks if the pipe is empty). Pipes can be used for Inter-Process Communication. 
+Pipe exists in Kernel space. When a process reads
+from a pipe, those bytes are removed from the pipe.
+
+
+The function int pipe(int file_des[2]) returns 0 on success and -1 on error.
+This will connect read_fd - that is file_des[0] of the calling process to the 
+read end of pipe. 
+write_fd of - that is file_des[1] of the calling process will be connected to 
+the write end of the pipe. 
+pipe is also defined in <unistd.h>
+
+

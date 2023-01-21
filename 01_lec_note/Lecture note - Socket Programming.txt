@@ -1,0 +1,111 @@
+
+SOCKET PROGRAMMING
+
+need to activate root using,
+	sudo passwd root
+	su root
+need to install xinetd service using sudo apt-get install -y xinetd.
+need to install secure shell service using sudo apt-get install -y ssh.
+
+ifconfig -    to view ip settings                       in windows command prompt   ipconfig /all
+route -n      to view the gateway ip address
+cat /etc/hosts         to view the host ip addresses of the machine
+less /etc/services     to obtain the port numbers used by TCP/UDP
+systemctl is used to issue system control commands
+press q to exit
+eg:systemctl status ssh      //show the status of the secure shell protocol
+
+port 7 echo
+port 13 daytime
+port 22 ssh
+port 23 telnet
+port 80 tcp
+
+netstat -ant | grep 22     //netstat -ant is used to check the set of active internet connections. Here grep used to specify as port 22
+
+A socket is a communication endpoint which an process/application can write data to be sent through the communication network
+and read data from the communication network.
+Both communicating processes need to create a socket in their side of communication.
+The process/application can be on the same machine or different machines.
+Internet domain sockets are needed for IPC through communication networks.
+A UNIX domain socket is used for IPC between the same machine.
+
+Both domains have two types of sockets as,
+(1) Stream/TCP sockets - SOCK_STREAM
+(2) Datagram/UDP sockets - SOCK_DGRAM
+
+INTERNET DOMAIN STREAM SOCKETS
+
+Internet domain stream sockets are used for point to point(only two specific processes), full duplex(both directions), reliable(using sequence 
+numbers, acknowledgements and retransmissions),stream oriented(no message boundaries),error controlled(checksum),flow controlled(sliding window)
+and congestion controlled(congestion windows) communication. 
+
+nc - Netcat is the UNIX(Uniplexed Information and Computer Systems) utility used to read and write data across network connections. 
+
+int socket(int domain, int service_type, int protocol) returns a file descriptor for the new socket created.  
+Need to include <sys/socket.h>, <sys/types.h>
+
+The domain specifies whether the socket is IPv6 domain - AF_INET6 or Ipv4 - AF_INET or within kernel - AF_UNIX
+The service_type specifies whether the socket is SOCK_STREAM or SOCK_DGRAM.
+IPPROTO_TCP is passed for stream socket, IPPROTO_UDP is passed for UDP. You can even pass 0 for the socket to choose the appropriate protocol.
+
+
+A socket has 4 more attributes as Local IP, Local port, Remote IP, Remote port. 
+
+For the client: All above are initialized when connect() is called.
+For the server: bind() is used to set local addresses. accept() is used set remote addresses.
+
+
+int connect(int socket_fd, const struct sockaddr *sockptr, int addrlen_sockptr)
+is used to connect to socket_fd to the remote socket pointed by sockptr. Once connected, the process can read() and write() as 
+a normal file discriptor. Connect() automatically sets the local IP and local port of the socket. It also sets the remote IP address and port 
+of the socket using information from sockptr. addrlen specifies the size in bytes of the sockptr. Connect() is usually done in a client.
+
+socket address structure: struct sockaddr_in is used as the internet socket address structure.
+
+struct sockaddr_in{
+u_short  sin_family; //this is the domain of the socket.eg:AF_INET
+u_short  sin_port;   //port number
+struct in_addr sin_addr;//
+char sin_zero[8];
+}
+
+There are two byte orders.
+1. Little Endian byte order - Low order byte of the number is stored in the lowest address. Eg: Windows, UNIX OS
+2. Big Endian byte order - Low order byte of the number is stored in the highest address. - TCP uses Big Endian.
+
+htons(uint16_t number) function converts unsigned short integer(u_short) from host byte order to network byte order. Used for port numbers.
+htonl(unit32_t number) does the same for 32 bit integers. Used for IPv4 addresses.
+ntohs(), ntohl() convert network byte order to host byte order.
+By including <netinet/in.h>,<arpa/inet.h>
+
+int inet_aton(cont char *network_address, struct in_addr * address)
+converts the dotted decimal network_address such as IPv4 address to in_addr structure pointed by address in network byte order.
+
+By including <string.h>
+void * memset(void *s,int c,size_t n) fills the first n bytes of the memory pointed by s with constant byte c.
+
+Multiple processes can share a socket.
+You can use int close(int fd) to close a socket for calling process only. It closes the file descriptor from remote end and local end for the
+called process.
+
+But int shutdown(int socket_fd,int how) breaks the connection for all processes sharing the socket in the manner 'how'.
+int how can be one of;
+0 or SHUT_RD         //receives are not allowed
+1 or SHUT_WR         //sendings are not allowed
+2 or SHUT_RDWR       //sending and receiving are not allowed.
+
+SERVER ONLY CALLS
+
+int bind(int socket_fd, const struct sockaddr *sockptr, int addrlen)
+Arguments are same as connect. bind() is called in a server. A socket created by a server process must be bound first and then advertised
+later to be connect() by a client process.
+
+int listen(int sockfd,int backlog) allow the socket sockfd to receive incoming calls. This will create a queue and place incoming requests
+in the queue if the server is busy. backlog specifies the maximum connections allowed in the incoming queue. bind() should be called before
+listen() to listen on a specific port.
+
+int accept(int sockfd,struct sockaddr * callerid,socklen_t * addrelength) is used by the server process and returns a new socket descriptor
+to use for the client. sockfd is the master socket created by socket() and then bind() and listen() for connections. The file descriptor 
+returned by accept is called slave socket. callerid and addrelength are empty pointers which are set by Kernel as the client address and 
+length.

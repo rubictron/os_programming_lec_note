@@ -1,0 +1,12 @@
+
+Use High Level I/O functions in C for following Exercises.
+ 
+1. Create a text file named as doc1.txt and write name and age the user input using standard input to doc1.txt with possible error handling?
+
+2. Copy doc1.txt into another file doc2.txt with possible error handling?
+
+3. Create and open a file doc1.txt and close it. Then give read only privileges and open it. Write a program with error handling to write a sentence to it with error handling?
+
+4. Create and open a file doc1.txt with read and write privileges. Opne doc1.txt and write a sentence to it. Now change the privilege of doc2.txt to write only. Write a program with error handling to read from it with error handling?
+
+

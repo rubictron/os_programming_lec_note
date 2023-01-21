@@ -1,0 +1,43 @@
+ 
+ 1. Create a folder name folder1 and move it to Home directory?
+ 
+ 2. Open gedit and save the file as txt1.text in Desktop?
+ 
+ 3. Create an exact copy of txt1.text as txt2.text in the same directory?
+ 
+ 4. Go back to the home directory and copy Desktop directory to a directory known as directory1?
+ 
+ 5. Delete directory1, go to Desktop directory and long list txt2.text?
+ 
+ 6. Remove the write privilege of the user for txt2.text and add write privilege to users in File's group. List txt2.text to verify.
+ Opent txt2.txt in gedit and try to edit the file?
+ 
+ 7. Create a directory name mydir in desktop and create 3 empty text files as Doc1.txt, Doc2.txt and Doc3.txt inside mydir using touch command?
+ 
+ 8. Observe the statistics of Doc1.txt?
+ 
+ 9. change the access time of Doc1.txt?
+ 
+ 9. Check whether Doc1.txt is created or not and create Doc1.txt if not created. Check the access time of txt1.txt?
+ 
+ 10. change the modification time of Doc1.txt?
+ 
+ 11. open Doc2.txt in gedit and write text "Hello, i am text in document 2"and save and close. Display this text in terminal? 
+ 
+ 12. Create a directory named mydir2 in desktop and create two empty text files as Doc1.txt, Doc2.txt inside mydir2 using cat command?
+ 
+ 13. Write content "Hellow I'm text in document 1" into Doc1.txt and "Hello I'm text in Document 2 in Document 2" in Doc2.txt using gedit and 
+ display the written content on terminal using a single command?
+ 
+ 14. Append content of Doc1.txt to Doc2.txt and display Doc2.txt?
+ 
+ 15. Log out user session using the terminal?
+ 
+ 16. Shutdown Ubuntu using the terminal?
+ 
+ 17. Restart Ubunutu using the terminal?
+ 
+ 18. Create a new user account using the terminal?
+  
+ 
+ 

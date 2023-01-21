@@ -1,0 +1,52 @@
+File Input Output
+
+
+Low level IO---unistd.h
+open()
+read()
+write()
+
+
+high level IO
+fopen()
+fscanf()
+fprintf()
+fclose()
+
+
+file discriptor
+
+-1	Error
+0	Standerd Input
+1	Standerd Output
+2	Standerd Error
+3	fp1
+4	fp2
+
+opening a file
+
+open("fileName",Oarg1 | Oarg2, Parg);
+
+Open arguments
+
+	O_RDONLY
+	O_WRONLY
+	O_RDWR
+			| O_CREAT		---Create and open if file doesnt exsist
+			| O_TRUNC		---Delete content if file exsist
+			| O_APPEND		---Append to end of exsisting file
+
+Set privilage arguments
+
+S_IRUSR
+S_IWUSR
+S_IRGRP
+S_IROTH
+
+0666 --- read and write privilage for all users
+
+perror() --- stdlib.h
+
+
+
+write(fileDiscripter,text,size)

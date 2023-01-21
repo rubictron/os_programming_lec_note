@@ -1,0 +1,179 @@
+
+(Q1)
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <stdlib.h>
+
+int data_v = 100;
+
+int main()
+{
+
+int stack_v = 1000;
+
+int * heap_v;
+heap_v = (int *)malloc(4);
+*heap_v = 10000;
+pid_t PID_fork;
+switch(PID_fork=fork())
+{
+case -1:
+{perror("fork");exit(PID_fork);break;}
+
+case 0:
+data_v = 200;
+stack_v = 2000;
+*heap_v = 20000;
+break;
+
+default:
+sleep(2);
+break;
+
+}
+
+printf("\n This is %s process with Process ID %d. data_v is %d, stack_v is %d, heap_v is %d \n",((PID_fork==0)?"child":"parent"),getpid(),data_v,stack_v,*heap_v);
+return(0);
+}
+
+
+(Q2)
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/wait.h>
+
+int main()
+{
+
+int pipe_fd[2];
+if(pipe(pipe_fd) == -1)
+{
+perror("pipe");
+exit(0);
+}
+
+else
+{
+
+pid_t PID;
+
+switch(PID = fork())
+{
+case -1:
+perror("fork");
+exit(0);
+break;
+
+case 0: 
+close(pipe_fd[1]); //closes the write fd of child
+sleep(2); //child waits until the parent writes
+char buf[50];
+read(pipe_fd[0],buf,sizeof(buf));
+printf("This is child process. Received message is %s \n", buf);
+exit(0);
+break;
+
+default: // This is the parent process
+close(pipe_fd[0]); //closes the read fd of parent
+char msg[] = "Message from parent";
+write(pipe_fd[1],msg,sizeof(msg));
+exit(0);// execution of parent stops here
+
+break;
+}
+}
+return(0);
+}
+
+
+
+
+(Q3)
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+
+int main()
+{
+
+int pipe1_fd[2];
+int pipe2_fd[2];
+
+if(pipe(pipe1_fd)==-1)
+{
+perror("Pipe1");
+exit(0);
+}
+
+else if(pipe(pipe2_fd)==-1)
+{
+perror("pipe2");
+exit(0);
+}
+
+else
+{
+pid_t PID;
+switch(PID = fork())
+{
+case -1:
+perror("fork");exit(0);
+break;
+
+case 0:
+if(close(pipe1_fd[1])==-1)
+{perror("child write close");exit(0);}
+
+else if(close(pipe2_fd[0])==-1)
+{perror("child read close");exit(0);}
+
+else
+{
+int size = 25;
+char buf[size];
+int cr = read(pipe1_fd[0], buf,sizeof(buf));
+printf("Child process: %s \n",buf);
+char resp[] = "response from child";
+write(pipe2_fd[1],resp,sizeof(resp));
+exit(0);
+}
+break;
+
+default:
+if(close(pipe1_fd[0])==-1)
+{perror("parent read close");exit(0);}
+else if(close(pipe2_fd[1])==-1)
+{perror("parent write close");exit(0);}
+else
+{
+char msg[] = "Message from parent \n";
+write(pipe1_fd[1], msg,sizeof(msg));
+wait(PID,NULL,0); 
+char buf1[25];
+read(pipe2_fd[0],buf1,sizeof(buf1));
+printf("In parent process: %s \n",buf1);
+exit(0);
+}
+break;
+}
+}
+
+return(0);
+
+}
+
+
+

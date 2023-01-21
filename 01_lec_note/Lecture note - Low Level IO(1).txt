@@ -1,0 +1,52 @@
+
+UNIX I/O system calls return -1 on failure. Need to include the header file unistd.h 
+open second argument is mode. It can be one of,1
+
+open() - first argument is name of file, second argument can be one of 
+        O_RDONLY - open for read only.
+        O_WRONLY - open for writing only.
+        O_RDWR - open for reading and writing.
+                 or ed with following if necessary
+        O_CREAT - create file if the file does not exist.
+        O_TRUNC - Delete the content if the file exist
+        O_APPEND - Does not delete the content when the file exists.
+                    writing will be appended to the existing file.
+
+Third argument of open is set of file permission for set of users. Typically 0666 set read and write for all users.
+
+File descriptors 0,1,2 are assigned to 
+standar input, standard output, standard error respectively.
+
+In write()  first argument is file descriptor, 
+            Second argument is the memory address of the buffer 
+            from which the data is written. 
+            Third argument is the expected maximum size of the buffer.
+            Write returns the number of bytes written.
+
+
+read() returns 0 on EOF and -1 in error. 
+Otherwise returns the number of bytes read
+
+
+The file offset is set to point to the start of the file when the 
+file is opened and is automatically adjusted by each subsequent call
+to read() or write() so that it points to the next byte of the file 
+after the byte(s) just read or written. Thus, successive read() and 
+write() calls progress sequentially through a file.
+The lseek() system call adjusts the file offset of the open file 
+referred to by the file descriptor fd, according to the values 
+specified in offset and whence.
+
+lseek() first argument is file descriptor, 
+second argument is the number of offset in bytes.
+The third argument is called whence and is one of,
+
+
+SEEK_SET or 0 - The file offset is set offset bytes from the 
+                beginning of the file.
+SEEK_CUR or 1 - The file offset is adjusted by offset bytes 
+                relative to the current file offset.
+SEEK_END or 2 - The file offset is set to the size of the 
+                file plus offset. In other words, offset is
+                interpreted with respect to the next byte after 
+                the last byte of the file.

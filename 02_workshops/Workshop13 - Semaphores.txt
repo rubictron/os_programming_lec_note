@@ -1,0 +1,12 @@
+1. Write a program to create two threads. one thread runs a function which increments a process scope global variable by 1 10 million times and
+the other thread must decrement it by 1 10 million times. At last main thread must return the value of global variable.
+Use concurrency control using Semaphores to provide correct result?
+
+2. Write a program to create three threads. one thread runs a function which writes "Hello ", thread 2 should write "my name is " and thread3
+should write "Khan".  Serialize these threads using semaphores to get the correct result?
+
+3. Write a program to create two processes. Create a shared memory segment storing a long value. 
+child process must run a function which increments the shared memory segment by 1 10 million times and
+the parent process must decrement it by 1 10 million times. At last, the parent process must return the value of shared memory segment.
+Use concurrency control using Semaphores to provide correct result?
+

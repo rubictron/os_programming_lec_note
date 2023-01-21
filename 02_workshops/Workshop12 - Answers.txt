@@ -1,0 +1,284 @@
+
+1.	
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+
+void * thread_function1(void * argumes);
+void * thread_function2(void * argumes);
+int glb_var = 0;
+
+int main()
+{
+
+pthread_t tid1,tid2;
+int count = 10000000; 
+pthread_create(&tid1,NULL,thread_function1, (void *)&count);
+pthread_create(&tid2,NULL,thread_function2, (void *)&count);
+
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+
+printf("\n This is main thread. Global variable is %d",glb_var);
+return(0);
+}
+
+
+
+
+void * thread_function1(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+glb_var++;
+}
+pthread_exit(NULL);
+
+}
+
+void * thread_function2(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+glb_var--;
+}
+pthread_exit(NULL);
+
+}
+
+
+
+
+
+2. 
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+
+void * thread_function1(void * argumes);
+void * thread_function2(void * argumes);
+int glb_var = 0;
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+
+int main()
+{
+
+pthread_t tid1,tid2;
+int count = 10000000; 
+pthread_create(&tid1,NULL,thread_function1, (void *)&count);
+pthread_create(&tid2,NULL,thread_function2, (void *)&count);
+
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+
+printf("\n This is main thread. Global variable is %d",glb_var);
+return(0);
+}
+
+
+
+
+void * thread_function1(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+pthread_mutex_lock(&mutex1);
+glb_var++;
+pthread_mutex_unlock(&mutex1);
+}
+pthread_exit(NULL);
+
+}
+
+void * thread_function2(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+pthread_mutex_lock(&mutex1);
+glb_var--;
+pthread_mutex_unlock(&mutex1);
+}
+pthread_exit(NULL);
+
+}
+
+
+
+3. 
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+
+void * thread_function1(void * argumes);
+void * thread_function2(void * argumes);
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond1 = PTHREAD_COND_INITIALIZER;
+pthread_cond_t cond2 = PTHREAD_COND_INITIALIZER;
+
+
+int main()
+{
+
+pthread_t tid1,tid2;
+pthread_create(&tid1,NULL,thread_function1, NULL);
+pthread_create(&tid2,NULL,thread_function2, NULL);
+
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+
+return(0);
+}
+
+
+
+
+void * thread_function1(void * argumes)
+{
+
+for(int i=0;i<3;i++)
+{
+pthread_mutex_lock(&mutex1);
+for(int j=0;j<10;j++){printf("\nThread1");}
+pthread_cond_signal(&cond2);
+if(i<2){pthread_cond_wait(&cond1,&mutex1);}
+pthread_mutex_unlock(&mutex1);
+}
+printf("t1 over");
+pthread_exit(NULL);
+
+}
+
+void * thread_function2(void * argumes)
+{
+
+
+for(int i=0;i<6;i++)
+{ 
+pthread_mutex_lock(&mutex1);
+for(int j=0;j<5;j++){printf("\nThread2");}
+pthread_cond_signal(&cond1);
+if(i<3){pthread_cond_wait(&cond2,&mutex1);}
+pthread_mutex_unlock(&mutex1);
+}
+printf("t2 over");
+pthread_exit(NULL);
+
+}
+
+
+
+4. 
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+#define SIZE 5
+void * thread_function(void * argumes);
+
+struct arguments
+{
+int count;
+int retval;
+char text[10];
+}
+;
+
+struct arguments create_struct(int * sh,int ret, char mytext[]);
+
+int main()
+{
+
+char * msg[] = {"Thread1 ","Thread2 ","Thread3 ","Thread4 ","Thread5 "};
+int counter;
+scanf("%d",&counter);
+pthread_t tid[SIZE];
+void * pt[SIZE];
+struct arguments mystruct[SIZE];
+
+for(int i = 0; i<5;i++)
+{
+mystruct[i] = create_struct(&counter,10*(i+1),msg[i]);
+pthread_create(&tid[i],NULL,thread_function, (void *)(&mystruct[i]));
+}
+
+for(int i = 0; i<5;i++)
+{
+pthread_join(tid[i],&pt[i]);
+}
+
+
+printf("\nThis is main thread. T1: %d,T2: %d, T3: %d, T4: %d, T5: %d",*(int *)pt[0],*(int *)pt[1],*(int *)pt[2],*(int *)pt[3],*(int *)pt[4]);
+return(0);
+}
+
+
+struct arguments create_struct(int * sh,int ret, char mytext[])
+{
+struct arguments newstruct;
+newstruct.count = *sh;
+newstruct.retval = ret;
+strcpy(newstruct.text,mytext);
+return newstruct;
+}
+
+
+void * thread_function(void * argumes)
+{
+struct arguments struct1 =   *(struct arguments *)(argumes);
+
+int * returning_value = (int *)malloc(sizeof(long));
+*returning_value = struct1.retval;
+for(int i=0;i < struct1.count;i++)
+{
+printf("%s",struct1.text);
+sleep(0.001);
+}
+pthread_exit((void *)returning_value);
+
+}
+
+
+

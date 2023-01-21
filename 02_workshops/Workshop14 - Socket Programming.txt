@@ -1,0 +1,2 @@
+1.  Create a client program to connect to the echo service of a remote machine to send a user specified string of user specified size
+ and display the returned string on screen?

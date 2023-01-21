@@ -1,0 +1,271 @@
+
+ 1. 
+
+ 
+#include <stdio.h>
+void ascending_swap(double *p1,double *p2);
+
+int main(void)
+{
+double values[10];
+for(int i=0;i<10;i++)
+{
+printf("\nEnter number %d: ", (i+1)); 
+scanf("%lf",&values[i]);
+}
+
+for(int k = 0;k<10;k++)
+{
+for(int l = 9;l>k;l--)
+{
+ascending_swap(&values[k],&values[l]);
+}
+}
+
+printf("Numbers that you entered in ascending order is: ");
+int m = 0;
+while(m < 10)
+{
+printf("%lf ,",values[m]);
+m++;
+}
+return(0);
+}
+
+void ascending_swap(double *p1,double *p2)
+{
+  if(*p1 > *p2)
+{
+	double temp;
+	temp = *p2;
+	*p2 = *p1;
+	*p1 = temp;
+}
+else{}
+}
+
+ 
+ 
+ 2. 
+ 
+ #include <stdio.h>
+ const int word_size = 6;
+ const int words = 4;
+ void reverse_alph(char arr[][word_size],int size1);
+ void swapifhigh(char * pt1, char * pt2);
+ void justswap(char * pt1,char * pt2);
+ 
+ int main()
+ {
+ char word_arr[words][word_size];
+ for(int i=0;i < words; i++)
+ { 
+ printf("\n Enter name %d: \n", (i+1));
+ scanf("%6c", &word_arr[i][0]);
+ }
+ 
+ reverse_alph(word_arr, words);
+ printf("The reverse alphabetical order of numbers you entered is:  ");
+ 
+ for(int k=0; k<words; k++)
+ {
+ for(int j=0; j<word_size;j++)
+ {
+ printf("%c",word_arr[k][j]);
+ }
+ printf("\n");
+ }
+ return(0);
+ }
+ 
+ void reverse_alph(char arr[][word_size], int size1)
+ {
+ for(int i=0; i< size1;i++)
+ {
+	for(int j=(size-1);j>i;j--)
+	{
+		swapifhigh(&arr[j][0],&arr[i][0]);
+	}
+}
+}
+
+void swapifhigh(char * pt1, char * pt2)
+{
+if(*pt1 > *pt2)
+{
+int k=0;
+while(k<word_size)
+{
+justswap((pt1 + k),(pt2 + k));
+k++;
+}
+}
+else{}
+}
+ 
+void justswap(char * pt1, char * pt2)
+{ 
+int temp;
+temp = *pt1;
+*pt1 = *pt2;
+*pt2 = temp;
+}
+ 
+ 
+ 
+ 
+ 3. 
+ 
+ 
+struct mystruct
+{char char_value;int int_value;double double_value;};
+
+union myunion
+{
+char char_value; int int_value; double double_value;};
+
+struct mystruct initialize(char * pt1, int * pt2, double * pt3);
+
+int main()
+{
+char usr_char;int usr_int;double usr_double;
+printf("Enter the character: \n"); scanf("%c", &usr_char);
+printf("Enter the integer: \n");scanf("%d", &usr_int);
+printf("Enter the double: \n");scanf("%lf", &usr_double);
+struct mystruct new1 = initialize(&usr_char, &usr_int, &usr_double);
+union myunion new;
+new.char_value = usr_char;
+new.int_value = usr_int;
+new.double_value = usr_double;
+printf("\n For structure: the character entered is %c, integer is %d and double is %lf", new1.char_value, new1.int_value, new1.double_value);
+printf("\n For Union: the character entered is %c, integer is %d and double is %lf", new.char_value, new.int_value, new.double_value);
+return(0); 
+}
+ 
+struct mystruct initialize(char * pt1, int * pt2, double * pt3)
+{
+struct mystruct str1;
+str1.char_value = *pt1;
+str1.int_value = *pt2;
+str1.double_value = *pt3;
+return str1;
+} 
+ 
+ 
+ 
+ 
+ 4. 
+ 
+ 
+#include <stdio.h>
+#include <math.h>
+
+sturct point
+{
+double xpos;
+double ypos;
+};
+
+struct triangle
+{
+struct point pt1;
+struct point pt2;
+struct point pt3;
+};
+
+double length(struct *pt1, struct *pt2);
+struct point create_coordinate(double *x, double *y);
+struct triangle create_triangle(struct point * coordiate1,struct point * coordiate2,struct point * coordiate3);
+double calculate_perimeter(struct triangle *trian);
+
+int main(void)
+{
+double xval[3], yval[3];
+for(int i=0; i<3;i++)
+{
+printf("\n Enter xcoordinate %d: ", i);
+scanf("%lf", (xval + i));
+printf("\n Enter ycoordinate %d: ", i);
+scanf("lf", (yval + i));
+}
+struct point poi1 = create_coordinate(xval,yval);
+struct point poi2 = create_coordinate(xval+1,yval+1);
+struct point poi1 = create_coordinate(xval+2,yval+2);
+struct triangle tg1 = create_triangle(&poi1,&poi2,&poi3);
+printf("Perimeter of the triangle is %lf", calculate_perimeter(&tg1));
+return(0);
+
+}
+
+struct point create_coordinate(double *x, double *y)
+{
+struct point new;
+new.xpos = *x;
+new.ypos = *y;
+return new;
+}
+
+struct triangle create_triangle(struct point *coordinate1,struct point *coordinate2,struct point *coordinate3);
+{
+struct triangle tri1;
+tri1.pt1 = *coordiate1;
+tri1.pt2 = *coordiate2;
+tri1.pt3 = *coordiate3;
+return tri1;
+}
+
+
+double length(struct point *pt1, struct point *pt2)
+{
+double val1,val2,result;
+	if((pt1->xpos) >= (pt2->xpos)){val1 = (pt1->xpos) - (pt2->xpos);}else{val1 = (pt2->xpos) - (pt1->xpos);}
+	if((pt1->ypos) >= (pt2->ypos)){val2 = (pt1->ypos) - (pt2->ypos);}else{val2 = (pt2->ypos) - (pt1->ypos);}
+	result = sqrt((val1*val1) + (val2*val2));
+	return result;
+}
+
+double calculate_perimeter(struct triangle *trian)
+{
+double result;
+double length1 = length(&((*trian).pt1),&((*trian).pt2));
+double length2 = length(&((*trian).pt1),&((*trian).pt3));
+double length3 = length(&((*trian).pt3),&((*trian).pt2));
+return result = length1 + length2 + length3;
+}
+
+
+//Add -lm argument when compiling using gcc. lm stands for Link math. It is used to link math.h file to the c program.
+//Ex: gcc prog.c -o prog -lm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

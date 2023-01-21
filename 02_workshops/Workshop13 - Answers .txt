@@ -1,0 +1,241 @@
+1.
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+void * thread_function1(void * argumes);
+void * thread_function2(void * argumes);
+int glb_var = 0;
+const char * name = "/sem1_name";
+sem_t * sem1;
+
+int main()
+{
+sem1 = sem_open(name,O_CREAT,0666,1);
+pthread_t tid1,tid2;
+int count = 10000000; 
+pthread_create(&tid1,NULL,thread_function1, (void *)&count);
+pthread_create(&tid2,NULL,thread_function2, (void *)&count);
+
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+int x;
+sem_getvalue(sem1,&x);
+sem_close(sem1);
+sem_unlink(name);
+
+printf("\n This is main thread. Global variable is %d. Semaphore value is %d \n",glb_var,x);
+return(0);
+}
+
+
+
+
+void * thread_function1(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+sem_wait(sem1);
+glb_var++;
+sem_post(sem1);
+}
+pthread_exit(NULL);
+
+}
+
+void * thread_function2(void * argumes)
+{
+
+int x = *(int *)argumes;
+for(int i=0;i < x ;i++)
+{
+sem_wait(sem1);
+glb_var--;
+sem_post(sem1);
+}
+pthread_exit(NULL);
+
+}
+
+
+
+
+
+
+
+2.
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+void * thread_function1(void * argumes);
+void * thread_function2(void * argumes);
+void * thread_function3(void * argumes);
+
+const char * name1 = "/sem1_name";
+const char * name2 = "/sem2_name";
+sem_t * sem1;
+sem_t * sem2;
+
+int main()
+{
+sem1 = sem_open(name1,O_CREAT,0666,0);
+sem2 = sem_open(name2,O_CREAT,0666,0);
+pthread_t tid1,tid2,tid3;
+
+pthread_create(&tid1,NULL,thread_function1, NULL);
+pthread_create(&tid2,NULL,thread_function2, NULL);
+pthread_create(&tid3,NULL,thread_function3, NULL);
+
+pthread_join(tid1,NULL);
+pthread_join(tid2,NULL);
+pthread_join(tid3,NULL);
+
+sem_close(sem1);
+sem_close(sem2);
+sem_unlink(name1);
+sem_unlink(name2);
+
+return(0);
+}
+
+void * thread_function1(void * argumes)
+{
+printf("Hello ");
+sem_post(sem1);
+pthread_exit(NULL);
+}
+
+void * thread_function2(void * argumes)
+{
+sem_wait(sem1);
+printf("my name is ");
+sem_post(sem2);
+pthread_exit(NULL);
+}
+
+void * thread_function3(void * argumes)
+{
+sem_wait(sem2);
+printf("Khan ");
+sem_post(sem2);
+pthread_exit(NULL);
+}
+
+
+
+
+3.
+
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <sys/shm.h>
+
+void * function1(int * pt);
+void * function2(int * pt);
+const char * name = "/sem1_name";
+sem_t * sem1;
+
+int main()
+{
+sem1 = sem_open(name,O_CREAT,0666,1);
+int count = 10000000; 
+int shmid1;
+shmid1 = shmget(IPC_PRIVATE,4096,IPC_CREAT|0666);
+int * shm_ptr;
+shm_ptr = (int *)shmat(shmid1,NULL,SHM_R|SHM_W);
+*shm_ptr = 0;
+pid_t PID;
+switch(PID=fork())
+{
+case -1:
+perror("fork");
+exit(0);
+break;
+
+case 0:
+getpid();
+int * shm_ptr1;
+shm_ptr1 = (int *)shmat(shmid1,NULL,SHM_R|SHM_W);
+function1(shm_ptr1);
+shmdt((void *)shm_ptr1);
+sem_close(sem1);
+exit(0);
+break;
+
+default:
+getpid();
+int * shm_ptr2;
+shm_ptr2 = (int *)shmat(shmid1,NULL,SHM_R|SHM_W);
+function2(shm_ptr2);
+waitpid(PID,NULL,0);
+int x;
+sem_getvalue(sem1,&x);
+printf("\nShared memory value is is %d. Semaphore value is %d \n",*(shm_ptr2),x);
+sem_close(sem1);
+sem_unlink(name);
+shmdt((void *)shm_ptr2);
+shmctl(shmid1,IPC_RMID,NULL);
+exit(0);
+}
+return(0);
+}
+
+
+
+
+void * function1(int * pt)
+{
+for(int i=0;i < 10000000 ;i++)
+{
+sem_wait(sem1);
+*(pt)++;
+sem_post(sem1);
+}
+
+}
+
+void * function2(int * pt)
+{
+
+for(int i=0;i < 10000000 ;i++)
+{
+sem_wait(sem1);
+*(pt)--;
+sem_post(sem1);
+}
+}
+
